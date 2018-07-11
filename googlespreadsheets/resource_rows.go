@@ -82,7 +82,7 @@ func resourceRowsCreate(d *schema.ResourceData, meta interface{}) error {
 	ctx := context.Background()
 	_, err = srv.Spreadsheets.Values.Update(sheet.SpreadsheetId, vrange, rb).ValueInputOption(valueInputOption).Context(ctx).Do()
 	if err != nil {
-		panic(fmt.Errorf("Error update. %v", err))
+		return fmt.Errorf("Error during update. %v", err)
 	}
 
 	return resourceRowsRead(d, meta)
@@ -101,7 +101,7 @@ func resourceRowsRead(d *schema.ResourceData, meta interface{}) error {
 
 	resp, err := srv.Spreadsheets.Values.Get(mysheet.SpreadsheetId, vrange).Do()
 	if err != nil {
-		panic(fmt.Errorf("unable to retrieve data from sheet. %v", err))
+		return fmt.Errorf("unable to retrieve data from sheet. %v", err)
 	}
 
 	var result []interface{}

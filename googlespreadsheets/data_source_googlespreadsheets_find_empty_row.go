@@ -53,6 +53,7 @@ func dataSourceGooglespreadsheetsFindEmptyRowRead(d *schema.ResourceData, meta i
 		}
 	}
 	//No empty lines found in response, add new line
+	//TODO check if the new row is still included on range
 	if i == len(resp.Values) {
 		i++
 	}
