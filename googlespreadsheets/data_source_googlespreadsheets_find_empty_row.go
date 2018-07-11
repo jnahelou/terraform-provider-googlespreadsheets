@@ -42,7 +42,7 @@ func dataSourceGooglespreadsheetsFindEmptyRowRead(d *schema.ResourceData, meta i
 
 	resp, err := srv.Spreadsheets.Values.Get(mysheet.SpreadsheetId, vrange).Do()
 	if err != nil {
-		panic(fmt.Errorf("unable to retrieve data from sheet. %v", err))
+		return fmt.Errorf("unable to retrieve data from sheet. %v", err)
 	}
 
 	i := 0
@@ -52,13 +52,13 @@ func dataSourceGooglespreadsheetsFindEmptyRowRead(d *schema.ResourceData, meta i
 			break
 		}
 	}
+	//No empty lines found in response, add new line
+	if i == len(resp.Values) {
+		i++
+	}
 
 	d.SetId(mysheet.SpreadsheetId + "/" + vrange)
 	d.Set("spreadsheet_id", mysheet.SpreadsheetId)
-
-	if i > len(resp.Values) {
-		return fmt.Errorf("No empty row found in range %s.", vrange)
-	}
 	d.Set("position", strconv.Itoa(i))
 	return nil
 }
